@@ -2,24 +2,41 @@
   <div class="container">
     <div class="header">
       <h2>Crypto Universe</h2>
-      <h5>Check all the crpto currency latest updates</h5>
+      <h6>Check all the crypto currency lastest updates</h6>
     </div>
-
     <div class="sub-header">
       <marquee
         behavior="scroll"
         onmouseover="stop()"
         onmouseout="start()"
+        loop="infinite"
         direction="left"
-        >
+      >
         <div class="row">
-
+          <ng-container *ngFor="let row of bannerData">
+            <div class="col-1">
+              <div class="card">
+                <img [src]="row.image" width="100" class="img-fluid" alt="" />
+                <div class="card-body">
+                  <h5 class="card-title">
+                    {{ row.symbol | uppercase }}
+                    <span class="text-danger"
+                      >{{ row.market_cap_change_percentage_24h }}%</span
+                    >
+                  </h5>
+                  <p class="card-text">
+                    {{ row.current_price | currency }}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </ng-container>
         </div>
-    </marquee>
+      </marquee>
     </div>
   </div>
 </div>
 
-<div class="container mt-3">
-   <!-- table -->
+<div class="container">
+  <!-- Table -->
 </div>
