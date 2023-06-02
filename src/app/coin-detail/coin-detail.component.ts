@@ -3,6 +3,7 @@ import { ApiService } from '../service/api.service';
 import { ActivatedRoute } from '@angular/router';
 import { ChartConfiguration, ChartType } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts'; // HELPS IN UPDATING OUR CHART
+import { CurrencyService } from '../service/currency.service';
 
 @Component({
   selector: 'app-coin-detail',
@@ -49,7 +50,8 @@ export class CoinDetailComponent implements OnInit {
   // getting the id from the routes that is why we are using activated routes
   constructor(
     private api: ApiService,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private currencyService: CurrencyService
   ) {}
 
   ngOnInit(): void {
@@ -59,23 +61,34 @@ export class CoinDetailComponent implements OnInit {
     });
     this.getCoinData();
     this.getGraphData(this.days);
+    this.currencyService.getCurrency().subscribe((val) => {
+      this.currency = val;
+      this.getGraphData(this.days);
+      this.getCoinData();
+    });
   }
 
   getCoinData() {
     this.api.getCurrencyById(this.coinId).subscribe((res) => {
-      this.coinData = res;
       console.log(this.coinData);
+      if (this.currency === 'USD') {
+        res.market_data.current_price.inr = res.market_data.current_price.usd;
+        res.market_data.market_cap.inr = res.market_data.market_cap.usd;
+      }
+      res.market_data.current_price.inr = res.market_data.current_price.inr;
+      res.market_data.market_cap.inr = res.market_data.market_cap.inr;
+      this.coinData = res;
     });
   }
 
   getGraphData(days: number) {
-    this.days = days;
+    this.days = days; // this brings out the dynamics of 30 90 year
     this.api;
     this.api
       .getGrpahicalCurrencyData(this.coinId, this.currency, this.days)
       .subscribe((res) => {
         setTimeout(() => {
-          this.myLineChart.chart?.update();
+          this.myLineChart.chart?.update(); // update call on clicking of the button
         }, 200);
         this.lineChartData.datasets[0].data = res.prices.map((a: any) => {
           return a[1];

@@ -25,7 +25,7 @@
                     >
                   </h5>
                   <p class="card-text">
-                    {{ row.current_price | currency }}
+                    {{ row.current_price | currency: currency }}
                   </p>
                 </div>
               </div>
@@ -45,7 +45,7 @@
       style="color: aliceblue"
       matInput
       (keyup)="applyFilter($event)"
-      placeholder="Ex. Mia"
+      placeholder="Serch..."
       #input
     />
   </mat-form-field>
@@ -65,7 +65,7 @@
       <ng-container matColumnDef="current_price">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Price</th>
         <td mat-cell *matCellDef="let row">
-          {{ row.current_price | currency : "INR" }}
+          {{ row.current_price | currency : currency }}
         </td>
       </ng-container>
 
@@ -81,7 +81,7 @@
       <ng-container matColumnDef="market_cap">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Market Cap</th>
         <td mat-cell *matCellDef="let row">
-          {{ row.market_cap | currency : "INR" }}
+          {{ row.market_cap | currency : currency }}
         </td>
       </ng-container>
 
